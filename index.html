@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de Avaliações</title>
+<style>
+  :root{--blue:#2457c5;--blue-dark:#193f92;--bg:#f4f7fc;--text:#1f2937;--muted:#5b6472;--border:#cbd5e1;--green:#0f8a5f}
+  *{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text);font-size:19px}
+  .wrap{max-width:780px;margin:0 auto;padding:20px 16px 40px} header{background:var(--blue);color:white;border-radius:18px;padding:24px 22px;margin-bottom:18px}
+  h1{font-size:32px;margin:0 0 8px;line-height:1.15} header p{margin:0;font-size:20px;line-height:1.45}.card{background:#fff;border:1px solid #dbe3ef;border-radius:18px;padding:22px;box-shadow:0 5px 18px rgba(20,40,80,.06);margin-bottom:18px}
+  h2{margin:0 0 16px;font-size:25px}.hint{color:var(--muted);font-size:17px;line-height:1.45;margin:-4px 0 18px}.field{margin-bottom:16px} label{display:block;font-weight:700;margin-bottom:8px;font-size:20px}
+  .field input{width:100%;height:58px;font-size:26px;padding:10px 14px;border:2px solid var(--border);border-radius:12px;outline:none} input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(36,87,197,.14)}
+  .stars-row{display:grid;grid-template-columns:1fr 140px;gap:14px;align-items:center;margin:10px 0}.stars-label{font-size:22px;font-weight:700;letter-spacing:1px}.stars-label span{display:block;font-size:16px;letter-spacing:0;color:var(--muted);margin-top:2px;font-weight:400}
+  .stars-row input{width:140px;height:56px;font-size:25px;text-align:center;border:2px solid var(--border);border-radius:12px} button{width:100%;min-height:64px;border:0;border-radius:14px;background:var(--blue);color:white;font-size:24px;font-weight:800;cursor:pointer;margin-top:6px} button:hover{background:var(--blue-dark)}
+  .message{margin-top:14px;padding:14px 16px;border-radius:12px;background:#fff4df;border:1px solid #f4d48d;color:#6b4a00;display:none;line-height:1.45}.results{display:none}.current{text-align:center;background:#edf3ff;border-radius:16px;padding:18px;margin-bottom:16px}
+  .current .title{font-size:19px;color:var(--muted);margin-bottom:4px}.score{font-size:52px;font-weight:900;color:var(--blue);line-height:1.1}.total{font-size:22px;font-weight:700;margin-top:5px}.result{border:2px solid #dce5f0;border-radius:14px;padding:16px;margin:12px 0}.result .target{font-size:25px;font-weight:900}.result .need{font-size:23px;margin-top:7px;line-height:1.35}.need strong{color:var(--green)}.tiny{margin-top:14px;color:var(--muted);font-size:15px;line-height:1.4}.footer-note{text-align:center;color:var(--muted);font-size:15px;line-height:1.4;margin-top:12px}
+  @media(max-width:560px){body{font-size:18px}.wrap{padding:12px 10px 30px}header,.card{border-radius:14px}header{padding:20px 18px}h1{font-size:28px}header p{font-size:18px}.stars-row{grid-template-columns:1fr 118px}.stars-label{font-size:20px}.stars-row input{width:118px}.score{font-size:46px}}
+</style>
+</head>
+<body><div class="wrap">
+<header><h1>⭐ Calculadora de Avaliações</h1><p>Descubra sua nota atual e quantas avaliações de 5 estrelas você precisa para alcançar as próximas notas.</p></header>
+<section class="card"><h2>1. Total de avaliações</h2><p class="hint">Digite o número total de avaliações que aparece no seu perfil.</p><div class="field"><label for="total">Total de avaliações</label><input id="total" type="number" min="1" step="1" inputmode="numeric" placeholder="Ex.: 117"></div></section>
+<section class="card"><h2>2. Quantas avaliações você recebeu?</h2><p class="hint">Preencha a quantidade de cada nota. Você não precisa preencher os campos que forem zero.</p>
+<div class="stars-row"><div class="stars-label">⭐⭐⭐⭐⭐<span>5 estrelas</span></div><input id="s5" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></div>
+<div class="stars-row"><div class="stars-label">⭐⭐⭐⭐<span>4 estrelas</span></div><input id="s4" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></div>
+<div class="stars-row"><div class="stars-label">⭐⭐⭐<span>3 estrelas</span></div><input id="s3" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></div>
+<div class="stars-row"><div class="stars-label">⭐⭐<span>2 estrelas</span></div><input id="s2" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></div>
+<div class="stars-row"><div class="stars-label">⭐<span>1 estrela</span></div><input id="s1" type="number" min="0" step="1" inputmode="numeric" placeholder="0"></div>
+<div id="message" class="message"></div><button id="calc">🧮 CALCULAR</button></section>
+<section id="results" class="card results"><h2>Resultado</h2><div class="current"><div class="title">Sua nota atual</div><div class="score" id="score">4,97 ⭐</div><div class="total" id="totalResult">117 avaliações</div></div><div id="targets"></div><div class="tiny">O cálculo considera a nota exibida com duas casas decimais. As projeções mostram quantas novas avaliações de 5 estrelas são necessárias para a nota exibida chegar a cada próximo nível.</div></section>
+<div class="footer-note">Se a soma das notas não for igual ao total informado, a calculadora avisa antes de calcular.</div></div>
+<script>
+function val(id){const v=document.getElementById(id).value.trim();return v===""?0:Number(v)}
+function fmt(n){return new Intl.NumberFormat('pt-BR').format(n)} function fmtScore(x){return x.toFixed(2).replace('.',',')}
+function neededFiveStars(points,total,target){const threshold=target-0.005;if(points/total>=threshold-1e-12)return 0;return Math.ceil(((threshold*total-points)/(5-threshold))-1e-10)}
+function nextTargets(score){const out=[];for(let i=0;i<=2;i++){const cents=Math.floor(score*100+1e-9)+1+i;if(cents>500)break;out.push(cents/100)}return out}
+document.getElementById('calc').addEventListener('click',()=>{const m=document.getElementById('message');m.style.display='none';const total=val('total');const c={5:val('s5'),4:val('s4'),3:val('s3'),2:val('s2'),1:val('s1')};const a=Object.values(c);if(!Number.isInteger(total)||total<1){m.textContent='Digite um Total de avaliações válido (um número inteiro maior que zero).';m.style.display='block';return}if(a.some(x=>!Number.isInteger(x)||x<0)){m.textContent='Digite apenas números inteiros iguais ou maiores que zero nas notas.';m.style.display='block';return}const sum=a.reduce((x,y)=>x+y,0);if(sum!==total){m.innerHTML='A soma das notas é <strong>'+fmt(sum)+'</strong>, mas o total informado é <strong>'+fmt(total)+'</strong>.<br>Confira os números e tente novamente.';m.style.display='block';return}const points=5*c[5]+4*c[4]+3*c[3]+2*c[2]+c[1];const score=points/total;document.getElementById('score').textContent=fmtScore(score)+' ⭐';document.getElementById('totalResult').textContent=fmt(total)+' '+(total===1?'avaliação':'avaliações');const t=document.getElementById('targets');t.innerHTML='';nextTargets(score).forEach(target=>{const need=neededFiveStars(points,total,target);const d=document.createElement('div');d.className='result';d.innerHTML='<div class="target">⭐ Alcançar '+fmtScore(target)+'</div><div class="need">'+(need===0?'Você já atingiu essa nota.':'Faltam <strong>'+fmt(need)+' novas avaliações de 5 estrelas</strong>.')+'</div>';t.appendChild(d)});document.getElementById('results').style.display='block';document.getElementById('results').scrollIntoView({behavior:'smooth',block:'start'})});
+</script></body></html>
